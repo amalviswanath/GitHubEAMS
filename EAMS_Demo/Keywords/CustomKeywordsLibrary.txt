@@ -1,0 +1,57 @@
+*** Settings ***
+Library           Selenium2Library
+Library           DatabaseLibrary
+Library           ../CustomLibrary/Test.py
+Resource          ../ObjectRepository/object_repository_EAMS.txt
+Library           String
+Resource          ../InputData/CommonData.txt
+Library           Screenshot
+
+*** Keywords ***
+Screenshots
+    [Arguments]    ${filepath}    ${fileName}
+    [Documentation]    This keyword will capture screenshot and save it at provided location
+    ...
+    ...    Screenshots \ \ \ ${ScreenshotPath} \ \ NameofScreen
+    @{CurrentTime}    Get Time    month day hour min
+    Comment    Log Many    @{CurrentTime}
+    ${Screenshot_Path}    Set Variable    ${filepath}
+    ${Time}    Set Variable    @{CurrentTime}[0]-@{CurrentTime}[1]_@{CurrentTime}[2]h-@{CurrentTime}[3]m
+    Capture Page Screenshot    ${filepath}/${fileName}_${Time}.png
+
+LaunchEAMS
+    [Documentation]    This keyword is used to open the EAMS Login Page
+    @{Config}    Readvalue All    3    ${InputDataPath}    ConfigData
+    ${FF_Dir}    Set Variable    @{Config}[0]
+    ${Browser}    Set Variable    @{Config}[1]
+    ${EAMS_URL}    Set Variable    @{Config}[2]
+    # Reading inputs over
+    Open Browser    ${EAMS_URL}    ${Browser}    ff_profile_dir=${FF_Dir}
+    Maximize Browser Window
+    sleep    1s
+
+EAMS_Login
+    [Documentation]    This keyword is used to login to EAMS Application
+    @{Config}    Readvalue All    3    ${InputDataPath}    ConfigData
+    ${EAMS_UserName}    Set Variable    @{Config}[3]
+    ${EAMS_Password}    Set Variable    @{Config}[4]
+    # Reading inputs over
+    sleep    1s
+    Screenshots    ${Screenshot_Path}    LoginPage
+    Run Keyword And Ignore Error    Input Text    ${OR_UserName_TextField}    ${EAMS_UserName}
+    Run Keyword And Ignore Error    Input Text    ${OR_Password_TextField}    ${EAMS_Password}
+    Run Keyword And Ignore Error    Click Button    ${OR_Login_Button}
+    ${LoginPopupFormVer}    ${LoginPopupFormStatus}    Run Keyword And Ignore Error    Wait Until Page Contains Element    ${OR_Login_PopupForm_Close}
+    Run Keyword If    '${LoginPopupFormVer}'=='PASS'    Add Result    PASS    COMMON    User Should be able to login into EAMS    User logged into EAMS
+    ...    Username : ${EAMS_UserName}|Password : ${EAMS_Password}
+    ...    ELSE    Add Result    FAIL    COMMON    User Should be able to login into EAMS    User unable to login into EAMS
+    ...    EAMS Login Verification
+    sleep    1s
+    Run Keyword And Ignore Error    Click Element    ${OR_Login_PopupForm_Close}
+    sleep    2s
+    Screenshots    ${Screenshot_Path}    HomePage
+
+EAMS_LogOut
+    Click Element    ${OR_Logout_Button}
+    Wait Until Page Contains Element    ${OR_UserName_TextField}    10s
+    Close Browser

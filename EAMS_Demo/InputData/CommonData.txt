@@ -1,0 +1,3 @@
+*** Variables ***
+${InputDataPath}    C:\\EAMS_Demo\\InputData\\EAMS_InputData.xlsx
+${Screenshot_Path}    C:\\EAMS_Demo\\Screenshots\\TabNavigation

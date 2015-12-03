@@ -1,0 +1,26 @@
+*** Settings ***
+Suite Setup       create_excel    C:\\EAMS_Demo\\ResultFiles
+Library           Selenium2Library
+Library           DatabaseLibrary
+Library           ../CustomLibrary/Test.py
+Resource          ../InputData/CommonData.txt
+Resource          ../ObjectRepository/object_repository_EAMS.txt
+Resource          ../Keywords/CustomKeywordsLibrary.txt
+
+*** Test Cases ***
+EAMS Home Page Tab Navigation
+    [Documentation]    EAMS Home Page Tab Navigation
+    [Tags]    Login
+    LaunchEAMS
+    EAMS_Login
+    Click Link    ${OR_Location_Tab}
+    Screenshots    ${Screenshot_Path}    LocationTab
+    Click Link    ${OR_Activities_Tab}
+    Screenshots    ${Screenshot_Path}    ActivitiesTab
+    Click Link    ${OR_COP_Deliverables_Tab}
+    Screenshots    ${Screenshot_Path}    COPDeliverablesTab
+    Click Element    ${OR_QA_Tab}
+    Screenshots    ${Screenshot_Path}    QATab
+    Click Element    ${OR_Manage_Permit_Tab}
+    Screenshots    ${Screenshot_Path}    ManagePermitTab
+    EAMS_LogOut

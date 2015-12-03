@@ -1,0 +1,13 @@
+*** Variables ***
+##====================    Login Page OR's    ============================
+${OR_UserName_TextField}    name=_username
+${OR_Password_TextField}    name=_password
+${OR_Login_Button}    //button[@type='submit']
+##====================    Home Page OR's    =============================
+${OR_Login_PopupForm_Close}    css=form[name="loginRegionPopUpForm"] > div.modal-header.btn-inverse > button.close
+${OR_Location_Tab}    Location
+${OR_Activities_Tab}    Activities
+${OR_COP_Deliverables_Tab}    COP Deliverables
+${OR_QA_Tab}      id=qaaudittab
+${OR_Manage_Permit_Tab}    id=permit
+${OR_Logout_Button}    css=b.icon-off

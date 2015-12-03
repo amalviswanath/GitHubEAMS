@@ -10,7 +10,7 @@ Resource          ../Keywords/CustomKeywordsLibrary.txt
 *** Test Cases ***
 EAMS Home Page Tab Navigation
     [Documentation]    EAMS Home Page Tab Navigation
-    [Tags]    Login
+    [Tags]    Login_Test
     LaunchEAMS
     EAMS_Login
     Click Link    ${OR_Location_Tab}
